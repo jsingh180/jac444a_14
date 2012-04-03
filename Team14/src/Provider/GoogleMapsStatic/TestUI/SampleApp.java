@@ -1,5 +1,6 @@
 /*
  * Created by JFormDesigner on Mon Apr 21 12:50:34 EDT 2008
+ * Edited by Rajbir and Jitender Dhanda
  */
 
 package Provider.GoogleMapsStatic.TestUI;
@@ -283,7 +284,98 @@ private void quitProgram() {
   _task.shutdown();
   System.exit(0);
 }
+/**
+ * @param what
+ */
+private void add(String what){
+  if(what=="lat"){
+		String text=ttfLat.getText();
+		double d=Double.parseDouble(text);
+		d+=1;
+		text=Double.toString(d);
+		ttfLat.setText(text);
+	}
+	if(what=="long"){
+		String text=ttfLon.getText();
+		double d=Double.parseDouble(text);
+		d+=1;
+		text=Double.toString(d);
+		ttfLon.setText(text);
+	}
+	if(what=="zoom"){
+		String text=ttfZoom.getText();
+		int d=Integer.parseInt(text);
+		if(d<19){
+			d+=1;
+		}
+		text=Integer.toString(d);
+		ttfZoom.setText(text);
+	}
+}
 
+private void sub(String what){
+	if(what=="lat"){
+		String text=ttfLat.getText();
+		double d=Double.parseDouble(text);
+		d-=1;
+		text=Double.toString(d);
+		ttfLat.setText(text);
+	}
+	if(what=="long"){
+		String text=ttfLon.getText();
+		double d=Double.parseDouble(text);
+		d-=1;
+		text=Double.toString(d);
+		ttfLon.setText(text);
+	}
+
+	if(what=="zoom"){
+		String text=ttfZoom.getText();
+		int d=Integer.parseInt(text);
+		if(d>0){
+			d-=1;
+		}
+		text=Integer.toString(d);
+		ttfZoom.setText(text);
+	}
+}
+
+private void changeCity(ItemSelectable cities){
+	String city=cities.getSelectedObjects()[0].toString();
+	if(city=="Toronto"){
+		ttfLat.setText("43.6481");
+		ttfLon.setText("-79.4042");
+	}
+	if(city=="Montreal"){
+		ttfLat.setText("45.5081");
+		ttfLon.setText("-73.5550");
+	}
+	if(city=="Ottawa"){
+		ttfLat.setText("45.4214");
+		ttfLon.setText("-75.6919");
+	}
+	if(city=="Vancouver"){
+		ttfLat.setText("49.2505");
+		ttfLon.setText("-123.1119");
+	}
+	if(city=="Edmonton"){
+		ttfLat.setText("53.5472");
+		ttfLon.setText("-113.5006");
+	}
+	if(city=="Calgary"){
+		ttfLat.setText("51.1");
+		ttfLon.setText("-114.1");
+	}
+	if(city=="Winnipeg"){
+		ttfLat.setText("49.8833");
+		ttfLon.setText("-97.1500");
+	}
+}
+
+
+/**
+ * 
+ */
 private void initComponents() {
   // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
   // Generated using JFormDesigner non-commercial license
@@ -313,7 +405,16 @@ private void initComponents() {
   ttfProgressMsg = new JTextField();
   progressBar = new JProgressBar();
   lblProgressStatus = new JLabel();
+  btnLongAdd=new JButton();
+  btnLongSub=new JButton();
+  btnLatAdd=new JButton();
+  btnLatSub=new JButton();
+  btnZoomIN = new JButton();
+  btnZoomOut = new JButton();
+  ddlCity = new JComboBox(citylist);
+  
 
+  
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
   setTitle("Google Static Maps");
@@ -343,7 +444,7 @@ private void initComponents() {
   				new TitledBorder("Configure the inputs to Google Static Maps"),
   				Borders.DLU2_BORDER));
   			panel1.setLayout(new TableLayout(new double[][] {
-  				{0.17, 0.17, 0.17, 0.17, 0.05, TableLayout.FILL},
+  				{0.17, 0.17, 0.17, 0.05, 0.17, 0.05,0.17, TableLayout.FILL},
   				{TableLayout.PREFERRED, TableLayout.PREFERRED, TableLayout.PREFERRED}}));
   			((TableLayout)panel1.getLayout()).setHGap(5);
   			((TableLayout)panel1.getLayout()).setVGap(5);
@@ -357,15 +458,46 @@ private void initComponents() {
   			ttfSizeW.setText("512");
   			panel1.add(ttfSizeW, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
+  			
   			//---- label4 ----
   			label4.setText("Latitude");
   			label4.setHorizontalAlignment(SwingConstants.RIGHT);
   			panel1.add(label4, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
+  		
+  		//---- btnSubLat ----
+  			btnLatSub.setText("<");
+  			panel1.add(btnLatSub, new TableLayoutConstraints(3, 0, 3, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			btnLatSub.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					sub("lat");
+  					
+  				}
+  			});
   			//---- ttfLat ----
   			ttfLat.setText("38.931099");
-  			panel1.add(ttfLat, new TableLayoutConstraints(3, 0, 3, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(ttfLat, new TableLayoutConstraints(4, 0, 4, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
+  			
+  			
+  			//---- btnAddLat----
+  			btnLatAdd.setText(">");
+  			panel1.add(btnLatAdd, new TableLayoutConstraints(5, 0, 5, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			btnLatAdd.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					add("lat");
+  					
+  				}
+  			});
+  			
+  			//---- ddlCity -----
+  			panel1.add(ddlCity, new TableLayoutConstraints(6, 0, 6, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			ddlCity.addItemListener(new ItemListener() {
+  				public void itemStateChanged(ItemEvent e){
+  					changeCity(e.getItemSelectable());
+  				}
+  			});
+  			
+  			
   			//---- btnGetMap ----
   			btnGetMap.setText("Get Map");
   			btnGetMap.setHorizontalAlignment(SwingConstants.LEFT);
@@ -375,7 +507,7 @@ private void initComponents() {
   					startTaskAction();
   				}
   			});
-  			panel1.add(btnGetMap, new TableLayoutConstraints(5, 0, 5, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(btnGetMap, new TableLayoutConstraints(6, 1, 6, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label3 ----
   			label3.setText("Size Height");
@@ -391,10 +523,30 @@ private void initComponents() {
   			label5.setHorizontalAlignment(SwingConstants.RIGHT);
   			panel1.add(label5, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
+  			//---- btnSubLon ----
+  			btnLongSub.setText("<");
+  			panel1.add(btnLongSub, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			btnLongSub.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					sub("long");
+  					
+  				}
+  			});
+  			
   			//---- ttfLon ----
   			ttfLon.setText("-77.3489");
-  			panel1.add(ttfLon, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(ttfLon, new TableLayoutConstraints(4, 1, 4, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
+  			//---- btnAddLon----
+  			btnLongAdd.setText(">");
+  			panel1.add(btnLongAdd, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			btnLongAdd.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					add("long");
+  					
+  				}
+  			});
+  			
   			//---- btnQuit ----
   			btnQuit.setText("Quit");
   			btnQuit.setMnemonic('Q');
@@ -405,7 +557,7 @@ private void initComponents() {
   					quitProgram();
   				}
   			});
-  			panel1.add(btnQuit, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(btnQuit, new TableLayoutConstraints(6, 2, 6, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label1 ----
   			label1.setText("License Key");
@@ -421,9 +573,30 @@ private void initComponents() {
   			label6.setHorizontalAlignment(SwingConstants.RIGHT);
   			panel1.add(label6, new TableLayoutConstraints(2, 2, 2, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
+  			//---- btnZoomOut----
+  			btnZoomOut.setText("-");
+  			panel1.add(btnZoomOut, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			btnZoomOut.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					sub("zoom");
+  					
+  				}
+  			});
+  			
   			//---- ttfZoom ----
-  			ttfZoom.setText("14");
-  			panel1.add(ttfZoom, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			ttfZoom.setText("5");
+  			panel1.add(ttfZoom, new TableLayoutConstraints(4, 2, 4, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			
+  			//---- btnZoomIN----
+  			btnZoomIN.setText("+");
+  			panel1.add(btnZoomIN, new TableLayoutConstraints(5, 2, 5, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			btnZoomIN.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					add("zoom");
+  					
+  				}
+  			});
+  			
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
@@ -501,6 +674,7 @@ private void initComponents() {
 
 // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 // Generated using JFormDesigner non-commercial license
+static String citylist[] = {"Select City","Toronto", "Ottawa", "Montreal", "Vancouver", "Edmonton", "Calgary", "Winnipeg"};
 private JPanel dialogPane;
 private JPanel contentPanel;
 private JPanel panel1;
@@ -527,5 +701,13 @@ private JCheckBox checkboxSendStatus;
 private JTextField ttfProgressMsg;
 private JProgressBar progressBar;
 private JLabel lblProgressStatus;
+private JButton btnLongAdd;
+private JButton btnLongSub;
+private JButton btnLatAdd;
+private JButton btnLatSub;
+private JButton btnZoomIN;
+private JButton btnZoomOut;
+private JComboBox ddlCity;
+
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
